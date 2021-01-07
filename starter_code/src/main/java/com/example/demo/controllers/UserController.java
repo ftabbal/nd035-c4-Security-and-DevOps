@@ -8,6 +8,7 @@ import com.example.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,9 +27,11 @@ import com.example.demo.model.requests.CreateUserRequest;
 public class UserController {
 
 	private UserService userService;
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-	public UserController(UserService userService, CartService cartService) {
+	public UserController(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
 		this.userService = userService;
+		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 	}
 
 	@GetMapping("/id/{id}")
@@ -45,8 +48,13 @@ public class UserController {
 	
 	@PostMapping("/create")
 	public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) {
+		if ( createUserRequest.getPassword().length() < 7
+				|| !createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())) {
+			return ResponseEntity.badRequest().build();
+		}
 		User user = new User();
 		user.setUsername(createUserRequest.getUsername());
+		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
 		user = userService.createUser(user);
 		return ResponseEntity.ok(user);
 	}
