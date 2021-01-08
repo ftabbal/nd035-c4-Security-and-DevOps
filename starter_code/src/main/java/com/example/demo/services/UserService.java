@@ -13,8 +13,8 @@ import java.util.Optional;
 @Transactional
 public class UserService {
 
-    private UserRepository userRepository;
-    private CartRepository cartRepository;
+    private final UserRepository userRepository;
+    private final CartRepository cartRepository;
 
     public UserService(UserRepository userRepository, CartRepository cartRepository) {
         this.userRepository = userRepository;
@@ -26,10 +26,6 @@ public class UserService {
         user.setCart(cart);
         user = userRepository.save(user);
         return user;
-    }
-
-    public User saveUser(User user) {
-        return userRepository.save(user);
     }
 
     public User getUserByName(String username) {

@@ -1,12 +1,6 @@
 package com.example.demo.controllers;
 
-import java.util.Optional;
-
-import com.example.demo.services.CartService;
-import com.example.demo.services.ObjectNotFoundException;
 import com.example.demo.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,18 +10,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.model.persistence.Cart;
 import com.example.demo.model.persistence.User;
-import com.example.demo.model.persistence.repositories.CartRepository;
-import com.example.demo.model.persistence.repositories.UserRepository;
 import com.example.demo.model.requests.CreateUserRequest;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
 
-	private UserService userService;
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	private final UserService userService;
+	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	public UserController(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
 		this.userService = userService;

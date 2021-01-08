@@ -13,8 +13,8 @@ import java.util.List;
 @Transactional
 public class OrderService {
 
-    private OrderRepository orderRepository;
-    private UserService userService;
+    private final OrderRepository orderRepository;
+    private final UserService userService;
 
     public OrderService(OrderRepository orderRepository, UserService userService) {
         this.orderRepository = orderRepository;

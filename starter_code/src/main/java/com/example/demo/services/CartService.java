@@ -4,8 +4,6 @@ import com.example.demo.model.persistence.Cart;
 import com.example.demo.model.persistence.Item;
 import com.example.demo.model.persistence.User;
 import com.example.demo.model.persistence.repositories.CartRepository;
-import com.example.demo.model.persistence.repositories.ItemRepository;
-import com.example.demo.model.persistence.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,9 +13,9 @@ import java.util.stream.IntStream;
 @Transactional
 public class CartService {
 
-    private CartRepository cartRepository;
-    private UserService userService;
-    private ItemService itemService;
+    private final CartRepository cartRepository;
+    private final UserService userService;
+    private final ItemService itemService;
 
     public CartService(CartRepository cartRepository, UserService userService, ItemService itemService) {
         this.cartRepository = cartRepository;
