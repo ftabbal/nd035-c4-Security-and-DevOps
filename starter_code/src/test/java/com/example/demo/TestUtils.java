@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import com.example.demo.model.persistence.Cart;
+import com.example.demo.model.persistence.User;
+
 import java.lang.reflect.Field;
 
 public class TestUtils {
@@ -21,6 +24,14 @@ public class TestUtils {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
 
+    public static User createUser() {
+        User user = new User();
+        user.setPassword("thisIsHashed");
+        user.setId(0);
+        user.setUsername("test");
+        user.setCart(new Cart());
+        return user;
     }
 }

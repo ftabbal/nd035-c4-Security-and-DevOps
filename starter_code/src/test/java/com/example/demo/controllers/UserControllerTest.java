@@ -1,14 +1,16 @@
 package com.example.demo.controllers;
 
+import com.example.demo.TestUtils;
 import com.example.demo.model.persistence.Cart;
 import com.example.demo.model.persistence.User;
 import com.example.demo.model.requests.CreateUserRequest;
 import com.example.demo.services.UserService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import static com.example.demo.TestUtils.createUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -21,9 +23,9 @@ public class UserControllerTest {
     private final UserService userService = mock(UserService.class);
     private final BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
 
-    @Before
-    public void setUp() {
-        userController = new UserController(userService, encoder);
+    @BeforeEach
+     void init() {
+        this.userController = new UserController(userService, encoder);
     }
 
     @Test
@@ -82,13 +84,5 @@ public class UserControllerTest {
         assertNotNull(response.getBody());
     }
 
-    private User createUser() {
-        User user = new User();
-        user.setPassword("thisIsHashed");
-        user.setId(0);
-        user.setUsername("test");
-        user.setCart(new Cart());
-        return user;
-    }
 
 }
