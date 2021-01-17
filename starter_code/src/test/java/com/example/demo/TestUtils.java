@@ -45,4 +45,15 @@ public class TestUtils {
         item.setPrice(BigDecimal.valueOf(12L));
         return item;
     }
+
+    public static Cart createFilledCart(int numItems) {
+        Cart cart = new Cart();
+        Item item = createItem();
+
+        for (int i = 0; i < numItems; ++i) {
+            cart.addItem(item);
+        }
+
+        return cart;
+    }
 }
