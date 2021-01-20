@@ -1,8 +1,11 @@
 package com.example.demo.services;
 
+import com.example.demo.controllers.UserController;
 import com.example.demo.model.persistence.User;
 import com.example.demo.model.persistence.UserOrder;
 import com.example.demo.model.persistence.repositories.OrderRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,15 +18,20 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserService userService;
 
+    private static final Logger log = LoggerFactory.getLogger(OrderService.class);
+
+
     public OrderService(OrderRepository orderRepository, UserService userService) {
         this.orderRepository = orderRepository;
         this.userService = userService;
     }
 
     public UserOrder submitOrderForUser(String username) {
+        log.info("Attempting to submit order for {}", username);
         User user = userService.getUserByName(username);
         UserOrder order = UserOrder.createFromCart(user.getCart());
         order = orderRepository.save(order);
+        log.info("Order for {} has been submitted", username);
         return order;
     }
 

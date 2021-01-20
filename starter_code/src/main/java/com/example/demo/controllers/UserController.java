@@ -1,6 +1,8 @@
 package com.example.demo.controllers;
 
 import com.example.demo.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,8 @@ public class UserController {
 
 	private final UserService userService;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+	private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
 	public UserController(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
 		this.userService = userService;
@@ -45,7 +49,10 @@ public class UserController {
 		}
 		User user = new User();
 		user.setUsername(createUserRequest.getUsername());
+		log.info("Set username to {}", user.getUsername());
 		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
+
+		log.debug("Calling UserService.createUser() for user {}", user.getUsername());
 		user = userService.createUser(user);
 		return ResponseEntity.ok(user);
 	}

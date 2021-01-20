@@ -1,9 +1,12 @@
 package com.example.demo.services;
 
+import com.example.demo.controllers.UserController;
 import com.example.demo.model.persistence.Cart;
 import com.example.demo.model.persistence.Item;
 import com.example.demo.model.persistence.User;
 import com.example.demo.model.persistence.repositories.CartRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +19,9 @@ public class CartService {
     private final CartRepository cartRepository;
     private final UserService userService;
     private final ItemService itemService;
+
+    private static final Logger log = LoggerFactory.getLogger(CartService.class);
+
 
     public CartService(CartRepository cartRepository, UserService userService, ItemService itemService) {
         this.cartRepository = cartRepository;

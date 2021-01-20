@@ -3,6 +3,8 @@ package com.example.demo.controllers;
 import java.util.List;
 
 import com.example.demo.services.OrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,8 @@ import com.example.demo.model.persistence.UserOrder;
 public class OrderController {
 
 	private final OrderService orderService;
+
+	private static final Logger log = LoggerFactory.getLogger(OrderController.class);
 
 	public OrderController(OrderService orderService) {
 		this.orderService = orderService;
