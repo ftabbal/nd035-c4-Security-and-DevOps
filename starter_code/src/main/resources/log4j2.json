@@ -1,0 +1,39 @@
+{
+  "configuration": {
+    "name": "Default",
+    "appenders": {
+      "Console": {
+        "name": "Console-Appender",
+        "target": "SYSTEM_OUT",
+        "PatternLayout": {
+          "pattern": "[%highlight{%level}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue}] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+        }
+      },
+      "SplunkHttp": {
+        "name": "splunk_logger",
+        "url": "https://inputs.prd-p-kb4yr.splunkcloud.com:8088",
+        "token": "69fcfb79-b0c6-41a5-b2c0-066483fac5ce",
+        "index": "main",
+        "source": "eCommerceApp",
+
+        "messageFormat": "text",
+        "middleware": "HttpEventCollectorUnitTestMiddleware",
+        "disableCertificateValidation": "true",
+        "PatternLayout": {
+          "pattern": "%d{yyyy-MM-dd HH:mm:ss.SSS} - %msg"
+        }
+      }
+    },
+    "loggers": {
+      "logger": {
+        "name": "com.example.demo",
+        "level": "info",
+        "appender-ref": {"ref": "splunk_logger"}
+      },
+      "root": {
+        "level": "info",
+        "appender-ref": {"ref": "Console-Appender"}
+      }
+    }
+  }
+}
