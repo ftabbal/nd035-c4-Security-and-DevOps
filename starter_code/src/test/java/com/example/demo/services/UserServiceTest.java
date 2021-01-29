@@ -1,5 +1,7 @@
 package com.example.demo.services;
 
+import com.example.demo.exceptions.EntityNotFoundException;
+import com.example.demo.exceptions.RepositoryException;
 import com.example.demo.model.persistence.Cart;
 import com.example.demo.model.persistence.User;
 import com.example.demo.model.persistence.repositories.CartRepository;
@@ -7,6 +9,8 @@ import com.example.demo.model.persistence.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import static com.example.demo.TestUtils.createUser;
 import static org.mockito.ArgumentMatchers.any;
@@ -37,6 +41,17 @@ public class UserServiceTest {
     }
 
     @Test
+    public void verify_createUser_userWithNameAlreadyExists() {
+        when(repo.save(any(User.class))).thenThrow(new DataIntegrityViolationException(""));
+
+        User user = createUser();
+
+        Assertions.assertThrows(RepositoryException.class, () -> {
+            userService.createUser(user);
+        });
+    }
+
+    @Test
     public void verify_getUserByName_userExists() {
         User user = createUser();
         when(repo.findByUsername(any(String.class))).thenReturn(user);
@@ -49,7 +64,7 @@ public class UserServiceTest {
     public void verify_getUserByName_userDoesNotExist() {
         when(repo.findByUsername(any(String.class))).thenReturn(null);
 
-        Assertions.assertThrows(ObjectNotFoundException.class,
+        Assertions.assertThrows(EntityNotFoundException.class,
                 () -> userService.getUserByName("test"));
     }
 
@@ -66,7 +81,7 @@ public class UserServiceTest {
     public void verify_getUserById_userDoesNotExist() {
         when(repo.findById(any(Long.class))).thenReturn(java.util.Optional.empty());
 
-        Assertions.assertThrows(ObjectNotFoundException.class,
+        Assertions.assertThrows(EntityNotFoundException.class,
                 () -> userService.getUserById(0));
     }
 

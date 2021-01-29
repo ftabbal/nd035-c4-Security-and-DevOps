@@ -1,6 +1,5 @@
 package com.example.demo.services;
 
-import com.example.demo.controllers.UserController;
 import com.example.demo.model.persistence.User;
 import com.example.demo.model.persistence.UserOrder;
 import com.example.demo.model.persistence.repositories.OrderRepository;
@@ -27,11 +26,11 @@ public class OrderService {
     }
 
     public UserOrder submitOrderForUser(String username) {
-        log.info("Attempting to submit order for {}", username);
+        log.debug("Attempting to submit order for {}", username);
         User user = userService.getUserByName(username);
         UserOrder order = UserOrder.createFromCart(user.getCart());
         order = orderRepository.save(order);
-        log.info("Order for {} has been submitted", username);
+        log.debug("Order for {} has been submitted", username);
         return order;
     }
 

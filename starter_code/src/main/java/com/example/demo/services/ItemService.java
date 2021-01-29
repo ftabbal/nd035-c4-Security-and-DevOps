@@ -1,6 +1,6 @@
 package com.example.demo.services;
 
-import com.example.demo.controllers.UserController;
+import com.example.demo.exceptions.EntityNotFoundException;
 import com.example.demo.model.persistence.Item;
 import com.example.demo.model.persistence.repositories.ItemRepository;
 import org.slf4j.Logger;
@@ -33,7 +33,7 @@ public class ItemService {
             return optionalItem.get();
         } else {
             log.warn("Attempted to get a non-existing user for id {}", id);
-            throw new ObjectNotFoundException("Cannot find item with id: " + id);
+            throw new EntityNotFoundException("Cannot find item with id: " + id);
         }
     }
 
@@ -41,7 +41,7 @@ public class ItemService {
         List<Item> itemList = itemRepository.findByName(itemName);
         if (itemList == null || itemList.isEmpty()) {
             log.info("No matching items for name {} has been found", itemName);
-            throw new ObjectNotFoundException(String.format("Cannot find item \"%s\"", itemName));
+            throw new EntityNotFoundException(String.format("Cannot find item \"%s\"", itemName));
         }
 
         return itemList;

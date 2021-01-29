@@ -1,14 +1,18 @@
 package com.example.demo.services;
 
-import com.example.demo.controllers.UserController;
+import com.example.demo.exceptions.EntityNotFoundException;
+import com.example.demo.exceptions.RepositoryException;
 import com.example.demo.model.persistence.Cart;
 import com.example.demo.model.persistence.User;
 import com.example.demo.model.persistence.repositories.CartRepository;
 import com.example.demo.model.persistence.repositories.UserRepository;
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.Optional;
 
@@ -27,22 +31,25 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        log.debug("Creating new cart for user {}", user.getUsername());
-        Cart cart = cartRepository.save(new Cart());
-        user.setCart(cart);
+        try {
+            log.debug("Creating new cart for user {}", user.getUsername());
+            Cart cart = cartRepository.save(new Cart());
+            user.setCart(cart);
 
-        log.debug("Saving user");
-        user = userRepository.save(user);
-        log.info("User {} has been saved.", user.getUsername());
+            log.debug("Saving user");
+            user = userRepository.save(user);
+            log.debug("User {} has been saved.", user.getUsername());
 
-        return user;
+            return user;
+        } catch (DataIntegrityViolationException exception) {
+            throw new RepositoryException(String.format("User \"%s\" could not be saved.", user.getUsername()));
+        }
     }
 
     public User getUserByName(String username) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            log.warn("User {} does not exist!", username);
-            throw new ObjectNotFoundException(String.format("Cannot find user \"%s\".", username));
+            throw new EntityNotFoundException(String.format("Cannot find user \"%s\".", username));
         }
         return user;
     }
@@ -52,8 +59,7 @@ public class UserService {
         if (optionalUser.isPresent())
             return optionalUser.get();
         else {
-            log.warn("Attempted to get a non-existing user for id {}", id);
-            throw new ObjectNotFoundException("Object not found!");
+            throw new EntityNotFoundException("No user with matching id has been found");
         }
     }
 }

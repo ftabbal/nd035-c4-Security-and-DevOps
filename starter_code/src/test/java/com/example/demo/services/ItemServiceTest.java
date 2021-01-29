@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.TestUtils;
+import com.example.demo.exceptions.EntityNotFoundException;
 import com.example.demo.model.persistence.Item;
 import com.example.demo.model.persistence.repositories.ItemRepository;
 import org.junit.jupiter.api.Assertions;
@@ -42,7 +43,7 @@ public class ItemServiceTest {
     public void verify_getByName_itemDoesNotExists() {
         when(itemRepository.findByName(anyString())).thenReturn(null);
 
-        Assertions.assertThrows(ObjectNotFoundException.class,
+        Assertions.assertThrows(EntityNotFoundException.class,
                 () -> itemService.getByName("test"));
     }
 
@@ -59,7 +60,7 @@ public class ItemServiceTest {
     public void verify_getById_itemDoesNotExists() {
         when(itemRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(ObjectNotFoundException.class,
+        Assertions.assertThrows(EntityNotFoundException.class,
                 () -> itemService.getById(0));
     }
 

@@ -49,11 +49,11 @@ public class UserController {
 		}
 		User user = new User();
 		user.setUsername(createUserRequest.getUsername());
-		log.info("Set username to {}", user.getUsername());
 		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));
 
 		log.debug("Calling UserService.createUser() for user {}", user.getUsername());
 		user = userService.createUser(user);
+		log.info("User \"{}\" has been saved.", user.getUsername());
 		return ResponseEntity.ok(user);
 	}
 	
