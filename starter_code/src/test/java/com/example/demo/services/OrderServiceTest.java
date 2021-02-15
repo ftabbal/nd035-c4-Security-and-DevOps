@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.TestUtils;
+import com.example.demo.exceptions.InvalidOrderException;
 import com.example.demo.model.persistence.Cart;
 import com.example.demo.model.persistence.User;
 import com.example.demo.model.persistence.UserOrder;
@@ -45,6 +46,22 @@ public class OrderServiceTest {
 
         Assertions.assertNotNull(actualOrder);
         Assertions.assertEquals(order, actualOrder);
+    }
+
+    @Test
+    public void verify_submitOrder_cannotSubmitEmptyCart() {
+        User user = TestUtils.createUser();
+        user.setCart(new Cart());
+        when(userService.getUserByName(anyString())).thenReturn(user);
+
+        Assertions.assertThrows(InvalidOrderException.class, () -> {
+            orderService.submitOrderForUser("test");
+        });
+    }
+
+    @Test
+    public void verify_submitOrder_cannotResubmitSameOrder() {
+
     }
 
     @Test

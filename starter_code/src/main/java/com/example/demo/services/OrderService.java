@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.exceptions.InvalidOrderException;
 import com.example.demo.model.persistence.User;
 import com.example.demo.model.persistence.UserOrder;
 import com.example.demo.model.persistence.repositories.OrderRepository;
@@ -29,8 +30,11 @@ public class OrderService {
         log.debug("Attempting to submit order for {}", username);
         User user = userService.getUserByName(username);
         UserOrder order = UserOrder.createFromCart(user.getCart());
+        if (order.getItems().isEmpty()) {
+            throw new InvalidOrderException("Cannot submit an empty order.");
+        }
         order = orderRepository.save(order);
-        log.debug("Order for {} has been submitted", username);
+        log.info("Order for {} has been submitted", username);
         return order;
     }
 
