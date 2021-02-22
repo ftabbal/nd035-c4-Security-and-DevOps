@@ -8,6 +8,8 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,7 +24,9 @@ import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-	 private final AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    protected static final Logger log = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
+
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -35,14 +39,22 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     		User credentials = new ObjectMapper()
                     .readValue(req.getInputStream(), User.class);
     		
-    		return authenticationManager.authenticate(
+    		Authentication auth =  authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             credentials.getUsername(),
                             credentials.getPassword(),
                             new ArrayList<>()));
+
+    		log.info(String.format("User \"%s\" has logged in.", credentials.getUsername()));
+
+    		return auth;
+
     	} catch (IOException e) {
     		throw new RuntimeException(e);
-    	}
+    	} catch (AuthenticationException e) {
+            log.warn(String.format("Failed to log in. Reason: %s", e.getMessage()));
+            throw e;
+        }
     }
     
     @Override
