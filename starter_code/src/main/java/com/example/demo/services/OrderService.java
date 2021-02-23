@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
 import com.example.demo.exceptions.InvalidOrderException;
+import com.example.demo.model.persistence.Cart;
 import com.example.demo.model.persistence.User;
 import com.example.demo.model.persistence.UserOrder;
 import com.example.demo.model.persistence.repositories.OrderRepository;
@@ -35,6 +36,7 @@ public class OrderService {
         }
         order = orderRepository.save(order);
         log.info("Order for {} has been submitted", username);
+        user.setCart(new Cart());
         return order;
     }
 
