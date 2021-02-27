@@ -12,8 +12,8 @@
       "SplunkHttp": {
         "name": "splunk_logger",
         "url": "http://localhost:8088",
-        "token": "3d5f0650-0d0f-41b5-bd04-7e8f53486488",
-        "index": "ecommerceindex",
+        "token": "c9aa7fc3-c905-499b-a6eb-1bcd445239ce",
+        "index": "main",
         "source": "eCommerceApp",
         "sourceType": "log4j2",
         "messageFormat": "text",
