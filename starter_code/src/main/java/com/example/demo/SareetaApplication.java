@@ -29,7 +29,7 @@ public class SareetaApplication {
 	}
 
 	@PreDestroy
-	public void logShutDown() {
+	private void shutdown() {
 		log.error("Application has terminated.");
 	}
 
