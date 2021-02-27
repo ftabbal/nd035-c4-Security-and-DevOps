@@ -1,6 +1,8 @@
 package com.example.demo.services;
 
 import com.example.demo.TestUtils;
+import com.example.demo.exceptions.CartException;
+import com.example.demo.exceptions.EntityNotFoundException;
 import com.example.demo.model.persistence.Cart;
 import com.example.demo.model.persistence.Item;
 import com.example.demo.model.persistence.User;
@@ -72,5 +74,18 @@ public class CartServiceTest {
         Assertions.assertNotNull(cart);
         Assertions.assertEquals(expectedTotal, cart.getTotal());
         Assertions.assertEquals(expectedCart, cart);
+    }
+
+    @Test
+    public void verify_addToCart_userDoesNotExist() {
+        User user = TestUtils.createUser();
+        when(userService.getUserByName(anyString())).thenThrow(EntityNotFoundException.class);
+
+        Item item = TestUtils.createItem();
+        when(itemService.getById(anyLong())).thenReturn(item);
+
+        Assertions.assertThrows(CartException.class, () -> {
+            cartService.addToCart("test", 22, 2);
+        });
     }
 }

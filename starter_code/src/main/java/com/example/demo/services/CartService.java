@@ -1,6 +1,8 @@
 package com.example.demo.services;
 
 import com.example.demo.controllers.UserController;
+import com.example.demo.exceptions.CartException;
+import com.example.demo.exceptions.EntityNotFoundException;
 import com.example.demo.model.persistence.Cart;
 import com.example.demo.model.persistence.Item;
 import com.example.demo.model.persistence.User;
@@ -30,14 +32,18 @@ public class CartService {
     }
 
     public Cart addToCart(String username, long itemId, int quantity) {
-        User user = userService.getUserByName(username);
-        Item item = itemService.getById(itemId);
-        Cart cart = user.getCart();
+        try {
+            User user = userService.getUserByName(username);
+            Item item = itemService.getById(itemId);
+            Cart cart = user.getCart();
 
-        IntStream.range(0, quantity)
-                .forEach(i -> cart.addItem(item));
+            IntStream.range(0, quantity)
+                    .forEach(i -> cart.addItem(item));
 
-        return cartRepository.save(cart);
+            return cartRepository.save(cart);
+        } catch (EntityNotFoundException ex) {
+            throw new CartException(String.format("Cart could not be saved. Reason: %s", ex.getMessage()));
+        }
     }
 
     public Cart removeFromCart(String username, long itemId, int quantity) {
