@@ -27,16 +27,13 @@ public class CartController {
 	
 	@PostMapping("/addToCart")
 	public ResponseEntity<Cart> addToCart(@RequestBody ModifyCartRequest request) {
-		log.debug("Attempting to add item(s) to cart for user {}", request.getUsername());
 		Cart cart = cartService.addToCart(request.getUsername(), request.getItemId(), request.getQuantity());
-		log.info("Cart has been updated");
 		return ResponseEntity.ok(cart);
 	}
 	
 	@PostMapping("/removeFromCart")
 	public ResponseEntity<Cart> removeFromCart(@RequestBody ModifyCartRequest request) {
 		Cart cart = cartService.removeFromCart(request.getUsername(), request.getItemId(), request.getQuantity());
-		log.info("Cart has been updated");
 		return ResponseEntity.ok(cart);
 	}
 }

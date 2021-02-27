@@ -3,10 +3,10 @@ package com.example.demo.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(code = HttpStatus.NOT_FOUND)
-public class CartException extends RuntimeException {
-
-    public CartException(String message) {
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class OrderException extends RuntimeException {
+    public OrderException(String message) {
         super(message);
     }
+
 }

@@ -1,12 +1,11 @@
 package com.example.demo.services;
 
 import com.example.demo.TestUtils;
-import com.example.demo.exceptions.InvalidOrderException;
+import com.example.demo.exceptions.OrderException;
 import com.example.demo.model.persistence.Cart;
 import com.example.demo.model.persistence.User;
 import com.example.demo.model.persistence.UserOrder;
 import com.example.demo.model.persistence.repositories.OrderRepository;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,7 +53,7 @@ public class OrderServiceTest {
         user.setCart(new Cart());
         when(userService.getUserByName(anyString())).thenReturn(user);
 
-        Assertions.assertThrows(InvalidOrderException.class, () -> {
+        Assertions.assertThrows(OrderException.class, () -> {
             orderService.submitOrderForUser("test");
         });
     }

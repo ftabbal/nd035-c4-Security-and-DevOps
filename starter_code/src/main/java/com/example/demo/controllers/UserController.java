@@ -48,10 +48,11 @@ public class UserController {
 			return ResponseEntity.badRequest().build();
 		}
 		if ( createUserRequest.getPassword().length() < 7) {
-			log.warn("Attempted to create user \"%s\" with password not matching requirement");
+			log.warn(String.format("Attempted to create user \"%s\" with password not matching requirement", createUserRequest.getUsername()));
 			return ResponseEntity.badRequest().build();
 		}
 		if (!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())) {
+			log.warn(String.format("Attempted to create user \"%s\" with mismatching passwords", createUserRequest.getUsername()));
 			return ResponseEntity.badRequest().build();
 		}
 

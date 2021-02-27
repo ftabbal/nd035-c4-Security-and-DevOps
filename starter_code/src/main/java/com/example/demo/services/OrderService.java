@@ -1,6 +1,7 @@
 package com.example.demo.services;
 
-import com.example.demo.exceptions.InvalidOrderException;
+import com.example.demo.exceptions.EntityNotFoundException;
+import com.example.demo.exceptions.OrderException;
 import com.example.demo.model.persistence.Cart;
 import com.example.demo.model.persistence.User;
 import com.example.demo.model.persistence.UserOrder;
@@ -32,7 +33,8 @@ public class OrderService {
         User user = userService.getUserByName(username);
         UserOrder order = UserOrder.createFromCart(user.getCart());
         if (order.getItems().isEmpty()) {
-            throw new InvalidOrderException("Cannot submit an empty order.");
+            log.warn("Attempted to submit an empty order.");
+            throw new OrderException("Cannot submit an empty order.");
         }
         order = orderRepository.save(order);
         log.info("Order for {} has been submitted", username);
@@ -41,7 +43,13 @@ public class OrderService {
     }
 
     public List<UserOrder> getOrdersForUser(String username) {
-        User user = userService.getUserByName(username);
-        return orderRepository.findByUser(user);
+        try {
+            User user = userService.getUserByName(username);
+            return orderRepository.findByUser(user);
+        } catch (EntityNotFoundException ex) {
+            log.warn(String.format("Cannot get orders for user %s. Reason: %s", username, ex.getMessage()));
+            throw new OrderException(String.format("Cannot get orders for user %s. Reason: %s",
+                    username, ex.getMessage()));
+        }
     }
 }

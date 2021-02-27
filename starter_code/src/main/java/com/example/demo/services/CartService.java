@@ -40,8 +40,11 @@ public class CartService {
             IntStream.range(0, quantity)
                     .forEach(i -> cart.addItem(item));
 
-            return cartRepository.save(cart);
+            Cart result =  cartRepository.save(cart);
+           log.info("Cart has been saved");
+           return result;
         } catch (EntityNotFoundException ex) {
+            log.warn(String.format("Cart could not be saved. Reason: %s", ex.getMessage()));
             throw new CartException(String.format("Cart could not be saved. Reason: %s", ex.getMessage()));
         }
     }
