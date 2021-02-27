@@ -32,7 +32,6 @@ public class ItemService {
         if (optionalItem.isPresent()) {
             return optionalItem.get();
         } else {
-            log.warn("Attempted to get a non-existing user for id {}", id);
             throw new EntityNotFoundException("Cannot find item with id: " + id);
         }
     }
@@ -40,7 +39,6 @@ public class ItemService {
     public List<Item> getByName(String itemName) {
         List<Item> itemList = itemRepository.findByName(itemName);
         if (itemList == null || itemList.isEmpty()) {
-            log.info("No matching items for name {} has been found", itemName);
             throw new EntityNotFoundException(String.format("Cannot find item \"%s\"", itemName));
         }
 

@@ -43,10 +43,19 @@ public class UserController {
 	
 	@PostMapping("/create")
 	public ResponseEntity<User> createUser(@RequestBody CreateUserRequest createUserRequest) {
-		if ( createUserRequest.getPassword().length() < 7
-				|| !createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())) {
+		if (createUserRequest.getPassword() == null || createUserRequest.getPassword().isBlank()) {
+			log.warn(String.format("Attempted to create user \"%s\" with empty password.", createUserRequest.getUsername()));
 			return ResponseEntity.badRequest().build();
 		}
+		if ( createUserRequest.getPassword().length() < 7) {
+			log.warn("Attempted to create user \"%s\" with password not matching requirement");
+			return ResponseEntity.badRequest().build();
+		}
+		if (!createUserRequest.getPassword().equals(createUserRequest.getConfirmPassword())) {
+			return ResponseEntity.badRequest().build();
+		}
+
+
 		User user = new User();
 		user.setUsername(createUserRequest.getUsername());
 		user.setPassword(bCryptPasswordEncoder.encode(createUserRequest.getPassword()));

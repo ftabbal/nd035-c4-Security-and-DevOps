@@ -63,6 +63,28 @@ public class UserControllerTest {
     }
 
     @Test
+    public void verify_createUser_noPassword() {
+        CreateUserRequest request = new CreateUserRequest();
+        request.setUsername("test");
+
+        ResponseEntity<User> response = userController.createUser(request);
+        assertNotNull(response);
+        assertEquals(400, response.getStatusCodeValue());
+    }
+
+    @Test
+    public void verify_createUser_blankPassword() {
+        CreateUserRequest request = new CreateUserRequest();
+        request.setUsername("test");
+        request.setPassword("    ");
+        request.setConfirmPassword("    ");
+
+        ResponseEntity<User> response = userController.createUser(request);
+        assertNotNull(response);
+        assertEquals(400, response.getStatusCodeValue());
+    }
+
+    @Test
     public void verify_findById_userExists() {
         User expectedUser = createUser();
         when(userService.getUserById(any(Long.class))).thenReturn(expectedUser);

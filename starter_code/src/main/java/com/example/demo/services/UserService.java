@@ -42,7 +42,8 @@ public class UserService {
 
             return user;
         } catch (DataIntegrityViolationException exception) {
-            throw new RepositoryException(String.format("User \"%s\" could not be saved.", user.getUsername()));
+            throw new RepositoryException(String.format("User \"%s\" could not be saved because user already exists",
+                    user.getUsername()));
         }
     }
 

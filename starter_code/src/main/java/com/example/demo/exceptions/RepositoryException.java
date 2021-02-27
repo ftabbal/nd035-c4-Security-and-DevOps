@@ -12,6 +12,6 @@ public class RepositoryException extends RuntimeException{
 
     public RepositoryException(String message) {
         super(message);
-        log.error(message);
+        log.warn(message);
     }
 }
